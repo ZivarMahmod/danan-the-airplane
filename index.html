@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Danan the Airplane</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="scene">
+    <header class="hud">
+      <div class="hud-title">DANAN <span>THE AIRPLANE</span></div>
+      <div class="hud-stats">
+        <div class="stat">
+          <span class="label">SCORE</span>
+          <span class="value" id="score">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">BEST</span>
+          <span class="value" id="best">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">SPEED</span>
+          <span class="value" id="speed">1.0x</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="stage">
+      <canvas id="game" width="960" height="320"></canvas>
+
+      <div id="overlay" class="overlay">
+        <div class="card">
+          <h1>Danan the Airplane</h1>
+          <p>Hoppa över hinderna. Varje <b>20&nbsp;m</b> = 1 poäng. Det går snabbare för varje poäng.</p>
+          <p class="keys"><kbd>Space</kbd> / <kbd>↑</kbd> / <kbd>Tap</kbd> för att hoppa</p>
+          <button id="startBtn" type="button">Starta</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="foot">
+      <span>Tryck <kbd>P</kbd> för paus · <kbd>R</kbd> för omstart</span>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
