@@ -23,6 +23,8 @@
   let score = 0;
   let best = +(localStorage.getItem('danan-best') || 0);
   let speedMul = 1;
+  let jumps = 0;
+  let jumpPulse = 0;
   let obstacles = [];
   let clouds = [];
   let stars = [];
@@ -48,6 +50,8 @@
     distance = 0;
     score = 0;
     speedMul = 1;
+    jumps = 0;
+    jumpPulse = 0;
     obstacles = [];
     spawnTimer = 60;
     danan.y = GROUND_Y;
@@ -87,6 +91,8 @@
     if (danan.onGround) {
       danan.vy = JUMP_V;
       danan.onGround = false;
+      jumps++;
+      jumpPulse = 1;
     }
   }
 
@@ -104,7 +110,7 @@
       bestEl.textContent = best;
     }
     overlayTitle.textContent = 'Krasch!';
-    overlayText.innerHTML = `Du fick <b>${score}</b> poäng (${Math.floor(distance)} m).<br>Tryck <kbd>Space</kbd> eller knappen för att försöka igen.`;
+    overlayText.innerHTML = `Du fick <b>${score}</b> poäng på <b>${Math.floor(distance)} m</b> och hoppade <b>${jumps}</b> gånger.<br>Tryck <kbd>Space</kbd> eller knappen för att försöka igen.`;
     startBtn.textContent = 'Spela igen';
     overlay.classList.remove('hidden');
   }
@@ -164,6 +170,7 @@
     }
 
     groundOffset = (groundOffset + speed) % 40;
+    if (jumpPulse > 0) jumpPulse = Math.max(0, jumpPulse - dt * 0.04);
 
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
@@ -363,10 +370,37 @@
     }
   }
 
+  function drawJumpCounter() {
+    const cx = W / 2;
+    const cy = H / 2 - 10;
+    const pulse = 1 + jumpPulse * 0.25;
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.font = 'bold 22px "Segoe UI", sans-serif';
+    ctx.fillStyle = 'rgba(248, 250, 252, 0.35)';
+    ctx.fillText('HOPP', cx, cy - 70);
+
+    ctx.translate(cx, cy);
+    ctx.scale(pulse, pulse);
+    ctx.font = 'bold 140px "Segoe UI", sans-serif';
+    const alpha = 0.18 + jumpPulse * 0.5;
+    ctx.fillStyle = `rgba(245, 158, 11, ${alpha})`;
+    ctx.fillText(String(jumps), 0, 0);
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = `rgba(251, 191, 36, ${0.25 + jumpPulse * 0.5})`;
+    ctx.strokeText(String(jumps), 0, 0);
+    ctx.restore();
+  }
+
   function draw() {
     ctx.clearRect(0, 0, W, H);
     drawSky();
     drawClouds();
+    if (state === STATE.PLAY || state === STATE.PAUSE) drawJumpCounter();
     drawGround();
     for (const o of obstacles) drawObstacle(o);
     drawDanan();
