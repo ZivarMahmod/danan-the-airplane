@@ -5,3 +5,6 @@ node_modules/
 .vscode/
 .idea/
 .claude/
+git.txt
+ghp_*
+*token*.txt
