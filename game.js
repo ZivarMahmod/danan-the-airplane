@@ -152,7 +152,7 @@
     const newScore = Math.floor(distance / 20);
     if (newScore > score) {
       score = newScore;
-      speedMul = 1 + score * 0.03;
+      speedMul = 1 + score * 0.003;
       updateHUD();
     }
 
