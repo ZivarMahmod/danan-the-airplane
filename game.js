@@ -25,6 +25,7 @@
   let speedMul = 1;
   let jumps = 0;
   let jumpPulse = 0;
+  let character = localStorage.getItem('danan-char') || 'dino';
   let obstacles = [];
   let clouds = [];
   let stars = [];
@@ -260,10 +261,7 @@
     ctx.fillRect(Math.round(x), Math.round(y), w, h);
   }
 
-  function drawDanan() {
-    const baseX = danan.x;
-    const topY = danan.y - danan.h;
-
+  function drawNameBanner(baseX, topY) {
     ctx.save();
     ctx.font = 'bold 8px monospace';
     ctx.textAlign = 'center';
@@ -273,7 +271,32 @@
     ctx.fillText('DANAN THE AIRPLANE', baseX + danan.w / 2, topY - 14);
     ctx.shadowBlur = 0;
     ctx.restore();
+  }
 
+  function legsRun(baseX, topY, bodyColor, shadeColor) {
+    if (danan.onGround) {
+      if (danan.runFrame === 0) {
+        px(baseX + 26, topY + 36, 6, 12, bodyColor);
+        px(baseX + 26, topY + 48, 8, 4, shadeColor);
+        px(baseX + 38, topY + 36, 6, 6, bodyColor);
+        px(baseX + 36, topY + 42, 8, 4, bodyColor);
+        px(baseX + 36, topY + 46, 8, 4, shadeColor);
+      } else {
+        px(baseX + 26, topY + 36, 6, 6, bodyColor);
+        px(baseX + 24, topY + 42, 8, 4, bodyColor);
+        px(baseX + 24, topY + 46, 8, 4, shadeColor);
+        px(baseX + 38, topY + 36, 6, 12, bodyColor);
+        px(baseX + 38, topY + 48, 8, 4, shadeColor);
+      }
+    } else {
+      px(baseX + 26, topY + 36, 6, 8, bodyColor);
+      px(baseX + 38, topY + 36, 6, 8, bodyColor);
+      px(baseX + 24, topY + 44, 10, 4, shadeColor);
+      px(baseX + 36, topY + 44, 10, 4, shadeColor);
+    }
+  }
+
+  function drawDino(baseX, topY) {
     const propY = topY - 6;
     const propX = baseX + 26;
     ctx.fillStyle = '#fbbf24';
@@ -288,10 +311,7 @@
     ctx.fillStyle = '#92400e';
     ctx.fillRect(propX - 1, propY - 2, 2, 2);
 
-    const body = '#10b981';
-    const shade = '#065f46';
-    const belly = '#34d399';
-
+    const body = '#10b981', shade = '#065f46', belly = '#34d399';
     px(baseX + 22, topY + 6, 22, 16, body);
     px(baseX + 28, topY + 4, 14, 4, body);
     px(baseX + 26, topY + 8, 4, 2, belly);
@@ -306,30 +326,123 @@
     px(baseX + 6, topY + 22, 10, 6, body);
     px(baseX + 6, topY + 22, 2, 6, shade);
     px(baseX + 2, topY + 26, 6, 4, body);
-
     px(baseX + 30, topY + 32, 4, 4, shade);
     px(baseX + 34, topY + 32, 4, 4, shade);
+    legsRun(baseX, topY, body, shade);
+  }
 
-    if (danan.onGround) {
-      if (danan.runFrame === 0) {
-        px(baseX + 26, topY + 36, 6, 12, body);
-        px(baseX + 26, topY + 48, 8, 4, shade);
-        px(baseX + 38, topY + 36, 6, 6, body);
-        px(baseX + 36, topY + 42, 8, 4, body);
-        px(baseX + 36, topY + 46, 8, 4, shade);
-      } else {
-        px(baseX + 26, topY + 36, 6, 6, body);
-        px(baseX + 24, topY + 42, 8, 4, body);
-        px(baseX + 24, topY + 46, 8, 4, shade);
-        px(baseX + 38, topY + 36, 6, 12, body);
-        px(baseX + 38, topY + 48, 8, 4, shade);
-      }
-    } else {
-      px(baseX + 26, topY + 36, 6, 8, body);
-      px(baseX + 38, topY + 36, 6, 8, body);
-      px(baseX + 24, topY + 44, 10, 4, shade);
-      px(baseX + 36, topY + 44, 10, 4, shade);
-    }
+  function drawUnicorn(baseX, topY) {
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.moveTo(baseX + 33, topY + 4);
+    ctx.lineTo(baseX + 36, topY - 8);
+    ctx.lineTo(baseX + 39, topY + 4);
+    ctx.closePath();
+    ctx.fill();
+
+    const body = '#fef3c7', shade = '#fde68a';
+    px(baseX + 22, topY + 6, 22, 16, body);
+    px(baseX + 28, topY + 4, 14, 4, body);
+    px(baseX + 24, topY + 6, 4, 6, '#ec4899');
+    px(baseX + 22, topY + 12, 4, 4, '#a855f7');
+    px(baseX + 26, topY + 14, 4, 4, '#3b82f6');
+    px(baseX + 38, topY + 8, 2, 2, '#0f172a');
+    px(baseX + 36, topY + 13, 5, 2, '#ec4899');
+    px(baseX + 22, topY + 22, 26, 14, body);
+    px(baseX + 26, topY + 28, 16, 4, shade);
+    px(baseX + 2, topY + 22, 6, 4, '#ef4444');
+    px(baseX + 2, topY + 26, 6, 4, '#f59e0b');
+    px(baseX + 2, topY + 30, 6, 4, '#10b981');
+    px(baseX + 8, topY + 24, 4, 4, '#3b82f6');
+    px(baseX + 8, topY + 28, 4, 4, '#a855f7');
+    legsRun(baseX, topY, body, shade);
+  }
+
+  function drawRobot(baseX, topY) {
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(baseX + 33, topY - 4, 2, 4);
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(baseX + 34, topY - 6, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    const body = '#cbd5e1', shade = '#64748b', accent = '#0ea5e9';
+    px(baseX + 22, topY + 0, 24, 18, body);
+    px(baseX + 22, topY + 0, 2, 18, shade);
+    px(baseX + 44, topY + 0, 2, 18, shade);
+    const blink = Math.sin(danan.propPhase * 4) > -0.7 ? accent : '#0c4a6e';
+    px(baseX + 27, topY + 5, 4, 4, blink);
+    px(baseX + 37, topY + 5, 4, 4, blink);
+    px(baseX + 28, topY + 13, 12, 2, '#0f172a');
+    px(baseX + 30, topY + 13, 2, 2, '#fbbf24');
+    px(baseX + 36, topY + 13, 2, 2, '#fbbf24');
+    px(baseX + 20, topY + 20, 28, 16, body);
+    px(baseX + 20, topY + 20, 2, 16, shade);
+    px(baseX + 46, topY + 20, 2, 16, shade);
+    px(baseX + 30, topY + 24, 8, 8, accent);
+    px(baseX + 32, topY + 26, 4, 4, '#fbbf24');
+    px(baseX + 14, topY + 22, 6, 4, body);
+    px(baseX + 48, topY + 22, 6, 4, body);
+    legsRun(baseX, topY, body, shade);
+  }
+
+  function drawAvocado(baseX, topY) {
+    px(baseX + 32, topY - 4, 2, 4, '#65a30d');
+    px(baseX + 33, topY - 6, 2, 2, '#65a30d');
+
+    const skin = '#365314', flesh = '#a3e635', pit = '#92400e';
+    px(baseX + 18, topY + 4, 30, 32, skin);
+    px(baseX + 22, topY + 8, 22, 24, flesh);
+    px(baseX + 28, topY + 14, 10, 12, pit);
+    px(baseX + 30, topY + 16, 2, 2, '#fbbf24');
+    px(baseX + 26, topY + 24, 2, 2, '#0f172a');
+    px(baseX + 38, topY + 24, 2, 2, '#0f172a');
+    px(baseX + 28, topY + 30, 10, 2, '#0f172a');
+    px(baseX + 28, topY + 28, 2, 2, '#ffffff');
+    px(baseX + 36, topY + 28, 2, 2, '#ffffff');
+    legsRun(baseX, topY, skin, '#1a2e05');
+  }
+
+  function drawGhost(baseX, topY) {
+    const bob = Math.sin(danan.propPhase * 2) * 3;
+    ctx.save();
+    ctx.translate(0, bob);
+
+    const body = '#e9d5ff', shade = '#a855f7', glow = 'rgba(168, 85, 247, 0.5)';
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(baseX + 32, topY + 24, 28, 0, Math.PI * 2);
+    ctx.fill();
+
+    px(baseX + 22, topY + 8, 22, 8, body);
+    px(baseX + 20, topY + 12, 26, 24, body);
+    px(baseX + 22, topY + 36, 4, 8, body);
+    px(baseX + 30, topY + 36, 6, 8, body);
+    px(baseX + 40, topY + 36, 4, 8, body);
+    px(baseX + 26, topY + 18, 4, 4, '#0f172a');
+    px(baseX + 36, topY + 18, 4, 4, '#0f172a');
+    px(baseX + 27, topY + 19, 1, 1, '#ffffff');
+    px(baseX + 37, topY + 19, 1, 1, '#ffffff');
+    px(baseX + 28, topY + 26, 8, 4, '#0f172a');
+    px(baseX + 30, topY + 30, 4, 2, '#ec4899');
+
+    ctx.restore();
+  }
+
+  const drawChar = {
+    dino: drawDino,
+    unicorn: drawUnicorn,
+    robot: drawRobot,
+    avocado: drawAvocado,
+    ghost: drawGhost,
+  };
+
+  function drawDanan() {
+    const baseX = danan.x;
+    const topY = danan.y - danan.h;
+
+    drawNameBanner(baseX, topY);
+    (drawChar[character] || drawDino)(baseX, topY);
 
     if (!danan.onGround) {
       ctx.fillStyle = 'rgba(0,0,0,0.25)';
@@ -441,4 +554,19 @@
   startBtn.addEventListener('click', () => {
     if (state === STATE.PAUSE) togglePause(); else startGame();
   });
+
+  const picker = document.getElementById('charPicker');
+  function setActiveCharButton() {
+    for (const b of picker.querySelectorAll('button')) {
+      b.classList.toggle('active', b.dataset.char === character);
+    }
+  }
+  picker.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-char]');
+    if (!btn) return;
+    character = btn.dataset.char;
+    localStorage.setItem('danan-char', character);
+    setActiveCharButton();
+  });
+  setActiveCharButton();
 })();

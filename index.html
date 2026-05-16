@@ -9,20 +9,29 @@
 <body>
   <div class="scene">
     <header class="hud">
-      <div class="hud-title">DANAN <span>THE AIRPLANE</span></div>
-      <div class="hud-stats">
-        <div class="stat">
-          <span class="label">SCORE</span>
-          <span class="value" id="score">0</span>
+      <div class="hud-row">
+        <div class="hud-title">DANAN <span>THE AIRPLANE</span></div>
+        <div class="hud-stats">
+          <div class="stat">
+            <span class="label">SCORE</span>
+            <span class="value" id="score">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">BEST</span>
+            <span class="value" id="best">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">SPEED</span>
+            <span class="value" id="speed">1.0x</span>
+          </div>
         </div>
-        <div class="stat">
-          <span class="label">BEST</span>
-          <span class="value" id="best">0</span>
-        </div>
-        <div class="stat">
-          <span class="label">SPEED</span>
-          <span class="value" id="speed">1.0x</span>
-        </div>
+      </div>
+      <div class="char-picker" id="charPicker">
+        <button type="button" data-char="dino">🦖 Dino</button>
+        <button type="button" data-char="unicorn">🦄 Enhörning</button>
+        <button type="button" data-char="robot">🤖 Robot</button>
+        <button type="button" data-char="avocado">🥑 Avokado</button>
+        <button type="button" data-char="ghost">👻 Spöke</button>
       </div>
     </header>
 
