@@ -12,9 +12,9 @@
   const W = canvas.width;
   const H = canvas.height;
   const GROUND_Y = H - 50;
-  const GRAVITY = 0.7;
-  const JUMP_V = -13.5;
-  const BASE_SPEED = 6;
+  const GRAVITY = 0.6;
+  const JUMP_V = -13;
+  const BASE_SPEED = 4;
 
   const STATE = { MENU: 0, PLAY: 1, OVER: 2, PAUSE: 3 };
 
@@ -146,7 +146,7 @@
     const newScore = Math.floor(distance / 20);
     if (newScore > score) {
       score = newScore;
-      speedMul = 1 + score * 0.06;
+      speedMul = 1 + score * 0.03;
       updateHUD();
     }
 
@@ -168,8 +168,8 @@
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
       spawnObstacle();
-      const minGap = Math.max(35, 90 - score * 1.5);
-      const maxGap = Math.max(60, 160 - score * 2);
+      const minGap = Math.max(60, 110 - score * 1);
+      const maxGap = Math.max(100, 200 - score * 1.5);
       spawnTimer = minGap + Math.random() * (maxGap - minGap);
     }
 
